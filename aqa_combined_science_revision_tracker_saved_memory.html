@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AQA Combined Science Revision Tracker</title>
+<style>
+:root {
+  --bg:#0b1020; --panel:#121a2d; --panel2:#17213a; --text:#eef4ff; --muted:#9fb0cf;
+  --line:#263452; --accent:#7cc4ff; --good:#7ee2a8; --warn:#ffd166; --danger:#ff7d8b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b1020,#10182a);color:var(--text)}
+button,input{font:inherit}
+.wrap{max-width:1180px;margin:auto;padding:18px}
+header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar{max-width:1180px;margin:auto;padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-size:clamp(20px,3vw,32px);margin:0;flex:1}
+.small{color:var(--muted);font-size:13px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer}
+.btn:hover{filter:brightness(1.13)}
+.btn.primary{background:#1c4d79;border-color:#2f6a9d}
+.btn.danger{background:#572a34;border-color:#75404c}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+.big{font-size:26px;font-weight:800}
+.progress{height:10px;background:#202b44;border-radius:999px;overflow:hidden;margin-top:8px}
+.progress>div{height:100%;background:linear-gradient(90deg,#4aa3df,#7ee2a8);width:0}
+.subject{margin:18px 0 28px}
+.subject-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.subject-title h2{margin:0;font-size:24px}
+.topic{border:1px solid var(--line);background:var(--panel);border-radius:16px;margin:12px 0;overflow:hidden}
+.topic summary{cursor:pointer;padding:15px 16px;font-weight:800;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.topic summary::-webkit-details-marker{display:none}
+.topic-body{padding:0 12px 14px}
+.subhead{font-weight:800;color:#c7dcff;margin:12px 4px 7px}
+.item{display:grid;grid-template-columns:minmax(220px,1fr) 42px minmax(160px,340px) 42px 68px 56px;align-items:center;gap:8px;padding:10px;border-top:1px solid #202c47}
+.item:first-child{border-top:none}
+.name{line-height:1.25}
+.num{color:var(--muted);font-size:12px;margin-right:7px}
+.step{border:1px solid var(--line);background:#1b2742;color:white;border-radius:10px;height:38px;cursor:pointer;font-weight:900}
+.step:hover{background:#243656}
+input[type=range]{width:100%;accent-color:#74c8ff}
+.value{text-align:center;font-weight:800}
+.plusone{border:1px solid #315d49;background:#163d2f;color:#aef0c7;border-radius:10px;height:38px;cursor:pointer;font-weight:800}
+.done .name{color:#9deab9}
+.search{width:min(360px,100%);padding:10px 12px;border-radius:11px;border:1px solid var(--line);background:#0e1628;color:white}
+.note{background:#13213a;border:1px solid #294b72;border-radius:14px;padding:12px 14px;color:#cfe6ff;margin-top:14px}
+.hidden{display:none!important}
+footer{padding:20px 0 40px;color:var(--muted);font-size:13px}
+@media(max-width:760px){
+  .summary{grid-template-columns:1fr 1fr}
+  .item{grid-template-columns:1fr 38px 1fr 38px 60px;gap:6px}
+  .plusone{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div>
+      <h1>🧬 AQA Combined Science Revision Tracker</h1>
+      <div class="small">261 packages • <span id="saveStatus">Auto-save on</span> • browser memory + backup storage</div>
+    </div>
+    <div class="toolbar">
+      <button class="btn primary" id="exportBtn">Export progress</button>
+      <label class="btn">Import progress<input id="importFile" type="file" accept=".json" hidden></label>
+      <button class="btn danger" id="resetBtn">Reset all</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="note"><b>Saved memory is ON.</b> Every slider/button change is written immediately to both Local Storage and IndexedDB, and it saves again when you leave the tab. <b>Important:</b> download this HTML once and keep opening that same downloaded file. The temporary ChatGPT file preview itself may use temporary browser storage. For another device, use <b>Export progress</b> then <b>Import progress</b>.</div>
+  <div class="summary">
+    <div class="card"><div class="small">Overall progress</div><div class="big" id="overallPct">0%</div><div class="progress"><div id="overallBar"></div></div></div>
+    <div class="card"><div class="small">Packages started</div><div class="big" id="startedCount">0 / 261</div></div>
+    <div class="card"><div class="small">Packages mastered</div><div class="big" id="masteredCount">0 / 261</div></div>
+    <div class="card"><div class="small">Revision points</div><div class="big" id="totalPoints">0</div></div>
+  </div>
+
+  <input class="search" id="search" placeholder="Search a package...">
+  <div id="app"></div>
+  <footer>Tip: use the slider for a quick score, +/− for precise changes, and +1 each time you revise a package.</footer>
+</main>
+
+<script>
+const DATA = {"Biology": [{"title": "1. Cell Biology", "subgroups": [{"title": "1A Cell structure", "items": [{"id": 1, "name": "Animal cells"}, {"id": 2, "name": "Plant cells"}, {"id": 3, "name": "Bacterial cells"}, {"id": 4, "name": "Cell organelles and their functions"}, {"id": 5, "name": "Microscopy and magnification"}]}, {"title": "1B Cell division", "items": [{"id": 6, "name": "Chromosomes, DNA and genes"}, {"id": 7, "name": "Cell cycle and mitosis"}, {"id": 8, "name": "Stem cells"}]}, {"title": "1C Transport", "items": [{"id": 9, "name": "Diffusion"}, {"id": 10, "name": "Osmosis"}, {"id": 11, "name": "Active transport"}, {"id": 12, "name": "Comparing transport methods"}]}], "items": []}, {"title": "2. Organisation", "subgroups": [{"title": "2A Organisation", "items": [{"id": 13, "name": "Cells → tissues → organs → organ systems"}]}, {"title": "2B Digestive system", "items": [{"id": 14, "name": "Digestive organs"}, {"id": 15, "name": "Digestive enzymes"}, {"id": 16, "name": "Bile and absorption"}]}, {"title": "2C Heart and blood", "items": [{"id": 17, "name": "Heart structure"}, {"id": 18, "name": "Blood vessels"}, {"id": 19, "name": "Blood"}, {"id": 20, "name": "Coronary heart disease"}]}, {"title": "2D Health", "items": [{"id": 21, "name": "Health and disease"}, {"id": 22, "name": "Risk factors"}, {"id": 23, "name": "Cancer"}]}, {"title": "2E Plant organisation", "items": [{"id": 24, "name": "Plant tissues"}, {"id": 25, "name": "Transport in plants"}, {"id": 26, "name": "Transpiration"}]}], "items": []}, {"title": "3. Infection and Response", "subgroups": [], "items": [{"id": 27, "name": "Types of pathogens"}, {"id": 28, "name": "Viral diseases"}, {"id": 29, "name": "Bacterial diseases"}, {"id": 30, "name": "Protist diseases"}, {"id": 31, "name": "Fungal and plant diseases"}, {"id": 32, "name": "Physical and chemical barriers"}, {"id": 33, "name": "White blood cells"}, {"id": 34, "name": "Vaccination"}, {"id": 35, "name": "Antibiotics"}, {"id": 36, "name": "Drug development and clinical trials"}]}, {"title": "4. Bioenergetics", "subgroups": [], "items": [{"id": 37, "name": "Photosynthesis equation"}, {"id": 38, "name": "Limiting factors"}, {"id": 39, "name": "Photosynthesis required practical"}, {"id": 40, "name": "Aerobic respiration"}, {"id": 41, "name": "Anaerobic respiration"}, {"id": 42, "name": "Exercise and oxygen debt"}, {"id": 43, "name": "Uses of glucose"}]}, {"title": "5. Homeostasis and Response", "subgroups": [], "items": [{"id": 44, "name": "Homeostasis"}, {"id": 45, "name": "Negative feedback"}, {"id": 46, "name": "Nervous system"}, {"id": 47, "name": "Reflexes"}, {"id": 48, "name": "Synapses"}, {"id": 49, "name": "Endocrine system"}, {"id": 50, "name": "Adrenaline"}, {"id": 51, "name": "Thyroxine"}, {"id": 52, "name": "Insulin"}, {"id": 53, "name": "Glucagon"}, {"id": 54, "name": "Diabetes"}, {"id": 55, "name": "Puberty and reproductive hormones"}, {"id": 56, "name": "Menstrual cycle"}, {"id": 57, "name": "Contraception and fertility"}, {"id": 58, "name": "Auxin"}, {"id": 59, "name": "Tropisms"}]}, {"title": "6. Inheritance, Variation and Evolution", "subgroups": [], "items": [{"id": 60, "name": "Sexual and asexual reproduction"}, {"id": 61, "name": "Meiosis"}, {"id": 62, "name": "DNA, genes and alleles"}, {"id": 63, "name": "Dominant and recessive alleles"}, {"id": 64, "name": "Genetic crosses"}, {"id": 65, "name": "Sex determination"}, {"id": 66, "name": "Genetic disorders"}, {"id": 67, "name": "Variation"}, {"id": 68, "name": "Mutations"}, {"id": 69, "name": "Natural selection"}, {"id": 70, "name": "Selective breeding"}, {"id": 71, "name": "Genetic engineering"}, {"id": 72, "name": "Evolution and evidence"}, {"id": 73, "name": "Speciation"}]}, {"title": "7. Ecology", "subgroups": [], "items": [{"id": 74, "name": "Communities and ecosystems"}, {"id": 75, "name": "Abiotic and biotic factors"}, {"id": 76, "name": "Competition"}, {"id": 77, "name": "Adaptations"}, {"id": 78, "name": "Quadrats"}, {"id": 79, "name": "Transects"}, {"id": 80, "name": "Population and distribution"}, {"id": 81, "name": "Food chains and food webs"}, {"id": 82, "name": "Trophic levels"}, {"id": 83, "name": "Biomass and energy transfer"}, {"id": 84, "name": "Carbon cycle"}, {"id": 85, "name": "Water cycle"}, {"id": 86, "name": "Decomposition"}, {"id": 87, "name": "Biodiversity"}, {"id": 88, "name": "Human impacts"}, {"id": 89, "name": "Maintaining biodiversity"}]}], "Chemistry": [{"title": "8. Atomic Structure and the Periodic Table", "subgroups": [], "items": [{"id": 90, "name": "Atoms, elements and compounds"}, {"id": 91, "name": "Atomic structure"}, {"id": 92, "name": "Electronic structure"}, {"id": 93, "name": "Development of the atomic model"}, {"id": 94, "name": "Periodic table organisation"}, {"id": 95, "name": "Groups and periods"}, {"id": 96, "name": "Group 1 — alkali metals"}, {"id": 97, "name": "Group 7 — halogens"}, {"id": 98, "name": "Group 0 — noble gases"}, {"id": 99, "name": "Transition metals"}]}, {"title": "9. Bonding, Structure and Properties", "subgroups": [], "items": [{"id": 100, "name": "Ionic bonding"}, {"id": 101, "name": "Ionic compounds"}, {"id": 102, "name": "Covalent bonding"}, {"id": 103, "name": "Simple molecular substances"}, {"id": 104, "name": "Giant covalent structures"}, {"id": 105, "name": "Metallic bonding"}, {"id": 106, "name": "Metals and their properties"}, {"id": 107, "name": "States of matter and structure"}, {"id": 108, "name": "Nanoparticles"}]}, {"title": "10. Quantitative Chemistry", "subgroups": [], "items": [{"id": 109, "name": "Conservation of mass"}, {"id": 110, "name": "Relative atomic mass"}, {"id": 111, "name": "Relative formula mass"}, {"id": 112, "name": "Balancing equations"}, {"id": 113, "name": "Percentage by mass"}, {"id": 114, "name": "Moles"}, {"id": 115, "name": "Mass calculations"}, {"id": 116, "name": "Concentration"}, {"id": 117, "name": "Percentage yield"}, {"id": 118, "name": "Atom economy"}, {"id": 119, "name": "Gas volumes"}]}, {"title": "11. Chemical Changes", "subgroups": [], "items": [{"id": 120, "name": "Reactivity series"}, {"id": 121, "name": "Metal extraction"}, {"id": 122, "name": "Oxidation and reduction"}, {"id": 123, "name": "Acids and alkalis"}, {"id": 124, "name": "pH scale"}, {"id": 125, "name": "Neutralisation"}, {"id": 126, "name": "Making salts"}, {"id": 127, "name": "Electrolysis"}, {"id": 128, "name": "Electrolysis of molten compounds"}, {"id": 129, "name": "Electrolysis of aqueous solutions"}]}, {"title": "12. Energy Changes", "subgroups": [], "items": [{"id": 130, "name": "Exothermic reactions"}, {"id": 131, "name": "Endothermic reactions"}, {"id": 132, "name": "Reaction profiles"}, {"id": 133, "name": "Bond energy"}, {"id": 134, "name": "Energy-change calculations"}, {"id": 135, "name": "Required practical — temperature changes"}]}, {"title": "13. Rate and Extent of Chemical Change", "subgroups": [], "items": [{"id": 136, "name": "Factors affecting reaction rate"}, {"id": 137, "name": "Collision theory"}, {"id": 138, "name": "Activation energy"}, {"id": 139, "name": "Required practical — reaction rates"}, {"id": 140, "name": "Reversible reactions"}, {"id": 141, "name": "Dynamic equilibrium"}, {"id": 142, "name": "Le Chatelier's principle"}, {"id": 143, "name": "Equilibrium and industrial processes"}]}, {"title": "14. Organic Chemistry", "subgroups": [], "items": [{"id": 144, "name": "Crude oil and hydrocarbons"}, {"id": 145, "name": "Fractional distillation"}, {"id": 146, "name": "Alkanes"}, {"id": 147, "name": "Combustion"}, {"id": 148, "name": "Cracking"}, {"id": 149, "name": "Alkenes"}, {"id": 150, "name": "Addition reactions"}, {"id": 151, "name": "Alcohols"}, {"id": 152, "name": "Carboxylic acids"}, {"id": 153, "name": "Esters"}, {"id": 154, "name": "Polymers"}]}, {"title": "15. Chemical Analysis", "subgroups": [], "items": [{"id": 155, "name": "Pure substances and formulations"}, {"id": 156, "name": "Chromatography"}, {"id": 157, "name": "Required practical — chromatography"}, {"id": 158, "name": "Gas tests"}, {"id": 159, "name": "Flame tests"}, {"id": 160, "name": "Metal-ion tests"}, {"id": 161, "name": "Halide tests"}, {"id": 162, "name": "Sulfate tests"}, {"id": 163, "name": "Required practical — identifying ions"}]}, {"title": "16. Chemistry of the Atmosphere", "subgroups": [], "items": [{"id": 164, "name": "Earth's early atmosphere"}, {"id": 165, "name": "Evolution of the atmosphere"}, {"id": 166, "name": "Greenhouse gases"}, {"id": 167, "name": "Global climate change"}, {"id": 168, "name": "Carbon footprint"}, {"id": 169, "name": "Atmospheric pollutants"}, {"id": 170, "name": "Potable water"}, {"id": 171, "name": "Required practical — water purification"}]}, {"title": "17. Using Resources", "subgroups": [], "items": [{"id": 172, "name": "Finite and renewable resources"}, {"id": 173, "name": "Potable water"}, {"id": 174, "name": "Waste water treatment"}, {"id": 175, "name": "Alternative methods of extracting metals"}, {"id": 176, "name": "Life-cycle assessments"}, {"id": 177, "name": "Recycling"}, {"id": 178, "name": "Ceramics, polymers and composites"}, {"id": 179, "name": "The Haber process"}, {"id": 180, "name": "Fertilisers"}, {"id": 181, "name": "Sustainable development"}]}], "Physics": [{"title": "18. Energy", "subgroups": [], "items": [{"id": 182, "name": "Energy stores and transfers"}, {"id": 183, "name": "Conservation of energy"}, {"id": 184, "name": "Kinetic energy"}, {"id": 185, "name": "Gravitational potential energy"}, {"id": 186, "name": "Elastic potential energy"}, {"id": 187, "name": "Power"}, {"id": 188, "name": "Efficiency"}, {"id": 189, "name": "Energy resources"}, {"id": 190, "name": "Energy calculations"}]}, {"title": "19. Electricity", "subgroups": [], "items": [{"id": 191, "name": "Charge and current"}, {"id": 192, "name": "Potential difference"}, {"id": 193, "name": "Resistance"}, {"id": 194, "name": "Resistance calculations"}, {"id": 195, "name": "Series circuits"}, {"id": 196, "name": "Parallel circuits"}, {"id": 197, "name": "I–V characteristics"}, {"id": 198, "name": "Required practical — resistance"}, {"id": 199, "name": "Electrical power"}, {"id": 200, "name": "Energy transferred electrically"}, {"id": 201, "name": "Domestic electricity"}, {"id": 202, "name": "Plugs and cables"}, {"id": 203, "name": "The National Grid"}]}, {"title": "20. Particle Model of Matter", "subgroups": [], "items": [{"id": 204, "name": "Density"}, {"id": 205, "name": "Density calculations"}, {"id": 206, "name": "States of matter"}, {"id": 207, "name": "Internal energy"}, {"id": 208, "name": "Changes of state"}, {"id": 209, "name": "Specific heat capacity"}, {"id": 210, "name": "Required practical — specific heat capacity"}, {"id": 211, "name": "Specific latent heat"}, {"id": 212, "name": "Gas pressure"}, {"id": 213, "name": "Temperature and pressure"}]}, {"title": "21. Atomic Structure", "subgroups": [], "items": [{"id": 214, "name": "Atoms and isotopes"}, {"id": 215, "name": "Development of the atomic model"}, {"id": 216, "name": "Radiation"}, {"id": 217, "name": "Alpha, beta and gamma radiation"}, {"id": 218, "name": "Nuclear equations"}, {"id": 219, "name": "Half-life"}, {"id": 220, "name": "Radiation in medicine"}, {"id": 221, "name": "Nuclear fission"}, {"id": 222, "name": "Nuclear fusion"}, {"id": 223, "name": "Radiation safety"}]}, {"title": "22. Forces", "subgroups": [], "items": [{"id": 224, "name": "Scalar and vector quantities"}, {"id": 225, "name": "Contact and non-contact forces"}, {"id": 226, "name": "Resultant forces"}, {"id": 227, "name": "Work done"}, {"id": 228, "name": "Moments"}, {"id": 229, "name": "Pressure"}, {"id": 230, "name": "Distance-time graphs"}, {"id": 231, "name": "Velocity-time graphs"}, {"id": 232, "name": "Acceleration"}, {"id": 233, "name": "Newton's laws"}, {"id": 234, "name": "Stopping distances"}, {"id": 235, "name": "Momentum"}, {"id": 236, "name": "Conservation of momentum"}, {"id": 237, "name": "Terminal velocity"}, {"id": 238, "name": "Forces and elasticity"}, {"id": 239, "name": "Required practical — force and extension"}]}, {"title": "23. Waves", "subgroups": [], "items": [{"id": 240, "name": "Transverse and longitudinal waves"}, {"id": 241, "name": "Wave properties"}, {"id": 242, "name": "Wave speed equation"}, {"id": 243, "name": "Reflection"}, {"id": 244, "name": "Refraction"}, {"id": 245, "name": "Sound"}, {"id": 246, "name": "Electromagnetic waves"}, {"id": 247, "name": "EM spectrum"}, {"id": 248, "name": "Uses and dangers of EM waves"}, {"id": 249, "name": "Lenses"}, {"id": 250, "name": "Ray diagrams"}, {"id": 251, "name": "Required practical — waves"}]}, {"title": "24. Magnetism and Electromagnetism", "subgroups": [], "items": [{"id": 252, "name": "Permanent magnets"}, {"id": 253, "name": "Magnetic fields"}, {"id": 254, "name": "Electromagnets"}, {"id": 255, "name": "Motor effect"}, {"id": 256, "name": "Electric motors"}, {"id": 257, "name": "Electromagnetic induction"}, {"id": 258, "name": "Generators"}, {"id": 259, "name": "Transformers"}, {"id": 260, "name": "Transformer calculations"}, {"id": 261, "name": "The National Grid"}]}]};
+const STORAGE_KEY = "aqa_combined_science_revision_v2";
+const LEGACY_KEY = "aqa_combined_science_revision_v1";
+let state = {};
+let db = null;
+
+async function openDB(){
+  return new Promise((resolve,reject)=>{
+    try{
+      const req=indexedDB.open("AQACombinedScienceRevisionDB",1);
+      req.onupgradeneeded=()=>req.result.createObjectStore("progress");
+      req.onsuccess=()=>{ db=req.result; resolve(db); };
+      req.onerror=()=>reject(req.error);
+    }catch(e){ reject(e); }
+  });
+}
+
+async function idbGet(){
+  if(!db) return null;
+  return new Promise(resolve=>{
+    try{
+      const tx=db.transaction("progress","readonly");
+      const req=tx.objectStore("progress").get("state");
+      req.onsuccess=()=>resolve(req.result || null);
+      req.onerror=()=>resolve(null);
+    }catch(e){ resolve(null); }
+  });
+}
+
+function idbPut(value){
+  if(!db) return;
+  try{
+    const tx=db.transaction("progress","readwrite");
+    tx.objectStore("progress").put(value,"state");
+  }catch(e){}
+}
+
+function localGet(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
+    if(!raw) return null;
+    const parsed=JSON.parse(raw);
+    return parsed && typeof parsed==="object" ? parsed : null;
+  }catch(e){ return null; }
+}
+
+function saveState(){
+  const payload=JSON.stringify(state);
+  try{ localStorage.setItem(STORAGE_KEY,payload); }catch(e){}
+  idbPut(state);
+  try{ document.cookie="scienceTrackerSaved=1; max-age=31536000; path=/; SameSite=Lax"; }catch(e){}
+  const s=document.getElementById("saveStatus");
+  if(s){
+    s.textContent="✓ Saved";
+    clearTimeout(window.__saveTimer);
+    window.__saveTimer=setTimeout(()=>s.textContent="Auto-save on",1200);
+  }
+  updateSummary();
+}
+
+async function initialiseStorage(){
+  try{
+    if(navigator.storage && navigator.storage.persist){
+      await navigator.storage.persist();
+    }
+  }catch(e){}
+  try{ await openDB(); }catch(e){}
+  const fromLocal=localGet();
+  const fromIDB=await idbGet();
+  state = (fromIDB && Object.keys(fromIDB).length ? fromIDB : fromLocal) || {};
+  if(fromLocal && (!fromIDB || Object.keys(fromIDB).length===0)) idbPut(fromLocal);
+  render();
+}
+
+window.addEventListener("beforeunload",()=>saveState());
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) saveState(); });
+function getVal(id){ return Math.max(0, Math.min(100, Number(state[id] ?? 0))); }
+function setVal(id, v){
+  state[id] = Math.max(0, Math.min(100, Math.round(v)));
+  saveState();
+  updateItem(id);
+}
+function allItems(){
+  const out=[];
+  Object.entries(DATA).forEach(([subject,topics])=>topics.forEach(t=>{
+    t.items.forEach(i=>out.push({...i,subject,topic:t.title}));
+    t.subgroups.forEach(s=>s.items.forEach(i=>out.push({...i,subject,topic:t.title,sub:s.title})));
+  }));
+  return out.sort((a,b)=>a.id-b.id);
+}
+const ITEMS = allItems();
+
+function pctFor(ids){
+  if(!ids.length) return 0;
+  return Math.round(ids.reduce((a,id)=>a+getVal(id),0)/ids.length);
+}
+
+function renderItem(item){
+  const v=getVal(item.id);
+  return `<div class="item ${v===100?'done':''}" data-item="${item.id}" data-search="${(item.name+' '+item.id).toLowerCase()}">
+    <div class="name"><span class="num">#${item.id}</span>${escapeHtml(item.name)}</div>
+    <button class="step" onclick="setVal(${item.id},getVal(${item.id})-1)">−</button>
+    <input type="range" min="0" max="100" value="${v}" oninput="setVal(${item.id},this.value)">
+    <button class="step" onclick="setVal(${item.id},getVal(${item.id})+1)">+</button>
+    <div class="value" id="v${item.id}">${v}%</div>
+    <button class="plusone" onclick="setVal(${item.id},getVal(${item.id})+1)">+1 revised</button>
+  </div>`;
+}
+function escapeHtml(s){ return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  Object.entries(DATA).forEach(([subject,topics])=>{
+    const subjectIds=[];
+    topics.forEach(t=>{ t.items.forEach(i=>subjectIds.push(i.id)); t.subgroups.forEach(s=>s.items.forEach(i=>subjectIds.push(i.id))); });
+    const sec=document.createElement('section');
+    sec.className='subject';
+    sec.dataset.subject=subject;
+    sec.innerHTML=`<div class="subject-title"><h2>${subject==='Biology'?'🧬':subject==='Chemistry'?'🧪':'⚡'} ${subject}</h2><b id="subject-${subject}">${pctFor(subjectIds)}%</b></div>`;
+    topics.forEach(topic=>{
+      const ids=[...topic.items.map(i=>i.id),...topic.subgroups.flatMap(s=>s.items.map(i=>i.id))];
+      const det=document.createElement('details');
+      det.className='topic';
+      det.open=false;
+      let body='';
+      topic.items.forEach(i=>body+=renderItem(i));
+      topic.subgroups.forEach(s=>{ body+=`<div class="subhead">${escapeHtml(s.title)}</div>`; s.items.forEach(i=>body+=renderItem(i)); });
+      det.innerHTML=`<summary><span>${escapeHtml(topic.title)}</span><span id="topic-${ids[0]}">${pctFor(ids)}%</span></summary><div class="topic-body">${body}</div>`;
+      det.dataset.ids=ids.join(',');
+      sec.appendChild(det);
+    });
+    app.appendChild(sec);
+  });
+  updateSummary();
+}
+
+function updateItem(id){
+  const el=document.querySelector(`[data-item="${id}"]`);
+  if(!el)return;
+  const v=getVal(id);
+  el.querySelector('input[type=range]').value=v;
+  el.querySelector('.value').textContent=v+'%';
+  el.classList.toggle('done',v===100);
+
+  const topic=el.closest('.topic');
+  const ids=topic.dataset.ids.split(',').map(Number);
+  topic.querySelector('summary span:last-child').textContent=pctFor(ids)+'%';
+
+  const section=el.closest('.subject');
+  const subject=section.dataset.subject;
+  const subjectIds=ITEMS.filter(x=>x.subject===subject).map(x=>x.id);
+  document.getElementById('subject-'+subject).textContent=pctFor(subjectIds)+'%';
+}
+
+function updateSummary(){
+  const vals=ITEMS.map(i=>getVal(i.id));
+  const total=vals.reduce((a,b)=>a+b,0);
+  const pct=Math.round(total/ITEMS.length);
+  document.getElementById('overallPct').textContent=pct+'%';
+  document.getElementById('overallBar').style.width=pct+'%';
+  document.getElementById('startedCount').textContent=vals.filter(v=>v>0).length+' / '+ITEMS.length;
+  document.getElementById('masteredCount').textContent=vals.filter(v=>v===100).length+' / '+ITEMS.length;
+  document.getElementById('totalPoints').textContent=total.toLocaleString();
+}
+
+document.getElementById('search').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.item').forEach(el=>el.classList.toggle('hidden',q && !el.dataset.search.includes(q)));
+  document.querySelectorAll('.topic').forEach(t=>{
+    const visible=[...t.querySelectorAll('.item')].some(i=>!i.classList.contains('hidden'));
+    t.classList.toggle('hidden',q && !visible);
+    if(q && visible)t.open=true;
+  });
+  document.querySelectorAll('.subject').forEach(s=>{
+    const visible=[...s.querySelectorAll('.topic')].some(t=>!t.classList.contains('hidden'));
+    s.classList.toggle('hidden',q && !visible);
+  });
+});
+
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify({version:1, exportedAt:new Date().toISOString(), state},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='science-revision-progress.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('importFile').addEventListener('change',async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{
+    const obj=JSON.parse(await f.text());
+    const imported=obj.state||obj;
+    if(!imported || typeof imported!=='object') throw new Error();
+    state=imported; saveState(); render();
+    alert('Progress imported successfully.');
+  }catch(err){ alert('That file is not a valid revision-progress backup.'); }
+  e.target.value='';
+});
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(confirm('Reset every package back to 0%?')){ state={}; try{localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(LEGACY_KEY);}catch(e){}; saveState(); render(); }
+});
+
+initialiseStorage();
+</script>
+</body>
+</html>
