@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f8fb">
+<title>Balanced GCSE Revision Timetable</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8fb;--surface:#fff;--ink:#171f31;--muted:#5e697c;--line:#e4e9f1;--navy:#233b74;--blue:#edf3ff;--indigo:#4866c5;--green:#1b8066;--softgreen:#e7f6ef;--purple:#764ebc;--softpurple:#f3edfc;--gold:#a56818;--softgold:#fff4df;--shadow:0 16px 45px rgba(37,50,78,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}button,select{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #88a8ff;outline-offset:3px}.page{max-width:1190px;margin:0 auto;padding:40px 24px 80px}.topline{display:flex;align-items:center;justify-content:space-between;gap:18px}.eyebrow{font-weight:800;letter-spacing:.12em;font-size:12px;color:#576dc4;text-transform:uppercase}h1{font-size:clamp(30px,5vw,49px);line-height:1.08;letter-spacing:-.045em;margin:11px 0 12px}h2{font-size:23px;letter-spacing:-.035em;margin:0}.intro{margin:0;color:var(--muted);max-width:640px;font-size:15px}.reset{border:1px solid #d8e0ef;background:white;border-radius:12px;padding:10px 15px;color:#405278;font-weight:700;white-space:nowrap}.reset:hover{background:#f0f4ff}.hero{padding:31px 34px;background:linear-gradient(118deg,#fff 46%,#f0f4fd 100%);border:1px solid #e7ebf2;border-radius:24px;box-shadow:var(--shadow);margin-bottom:22px}.hero-row{display:flex;align-items:end;justify-content:space-between;gap:20px}.hero-illustration{width:180px;flex:0 0 auto}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0 24px}.stat{background:#fff;border:1px solid var(--line);padding:16px 19px;border-radius:17px;min-width:0}.stat small{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:5px}.stat strong{font-size:24px;letter-spacing:-.04em}.stat span{font-size:13px;color:var(--muted)}.stat.free{background:var(--softgreen);border-color:#cdecdc}.stat.free strong{color:#167655}.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:2px}.progress-track{height:9px;border-radius:10px;background:#e7ebf5;overflow:hidden;flex:1}.progress-fill{height:100%;background:linear-gradient(90deg,#4d73d3,#31a885);border-radius:10px;width:0;transition:width .25s}.progress-label{font-weight:800;font-size:13px;color:#435170;min-width:62px;text-align:right}.section-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin:29px 0 13px}.section-top p{color:var(--muted);font-size:13px;margin:0}.weekday-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}.day{border:1px solid var(--line);background:#fff;border-radius:19px;padding:17px 15px;box-shadow:0 5px 24px rgba(34,49,83,.035);min-width:0}.day.today{outline:2px solid #8ba5f6;outline-offset:2px}.day-head{display:flex;justify-content:space-between;align-items:center;gap:6px}.day-name{font-size:15px;font-weight:850}.today-tag{font-size:10px;font-weight:850;background:#eaf0ff;color:#3b58aa;border-radius:50px;padding:4px 7px;white-space:nowrap}.day-schedule{font-size:11px;color:#66758c;margin:6px 0 16px;white-space:nowrap}.subject-select{width:100%;border:1px solid #dce3ef;background:#f9fbfe;color:#1d2b46;border-radius:10px;padding:10px 9px;font-size:14px;font-weight:800;min-width:0;cursor:pointer}.method{display:inline-flex;align-items:center;margin:9px 0 11px;padding:5px 9px;border-radius:7px;font-size:11px;font-weight:800;background:var(--blue);color:#3d60b6}.method.gizmo{background:var(--softpurple);color:var(--purple)}.method.paper{background:var(--softgold);color:var(--gold)}.focus{font-size:12px;line-height:1.5;color:#536077;min-height:54px;margin:0 0 13px}.mini-title{font-size:10px;color:#8290a3;text-transform:uppercase;font-weight:850;letter-spacing:.07em;margin-bottom:8px}.task{display:flex;gap:9px;align-items:flex-start;margin:9px 0;padding:0;color:#394660;font-size:12px;font-weight:650;cursor:pointer}.task input{margin:2px 0 0;accent-color:#2d9c78;width:16px;height:16px;flex:0 0 auto}.task .tasktext{flex:1}.task input:checked+.tasktext{text-decoration:line-through;color:#9ba6b4}.break{display:flex;align-items:center;gap:6px;margin:13px 0 10px;font-size:10px;letter-spacing:.02em;font-weight:750;color:#7b8696}.break:before,.break:after{content:"";height:1px;background:#e5e9f0;flex:1}.day-footer{border-top:1px solid #edf0f5;margin-top:13px;padding-top:11px;font-size:11px;color:#617085}.weekend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.weekend-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;min-width:0}.weekend-card.today{outline:2px solid #8ba5f6;outline-offset:2px}.weekend-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.weekend-sub{font-size:12px;color:var(--muted)}.weekend-rows{display:grid;grid-template-columns:1fr 1fr;gap:16px}.weekend-session{border-radius:14px;background:#f8faff;padding:14px;min-width:0}.session-time{font-size:11px;color:#73819a;margin-bottom:8px;font-weight:800}.weekend-session .focus{min-height:40px;margin:9px 0 0}.weekend-session .task{margin-bottom:0}.weekend-pause{font-size:12px;color:#657188;margin-top:13px;display:flex;gap:8px;align-items:center}.weekend-pause:before{content:"☕"}.routine{margin-top:25px;border:1px solid #dce8e3;background:#eff9f4;border-radius:19px;padding:20px 23px}.routine h3{margin:0 0 12px;color:#1b614d;font-size:15px}.routine-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.routine-step{display:flex;flex-direction:column;gap:3px;color:#315a4c}.routine-step strong{font-size:13px}.routine-step span{font-size:12px;line-height:1.4;color:#4c7766}.free-time{background:#daf1e5;border-radius:10px;padding:9px 10px;margin:-9px -10px;align-self:start}.footnote{text-align:center;color:#8390a4;font-size:12px;margin-top:26px}.print-button{border:none;border-radius:12px;background:#263f7b;color:white;padding:10px 16px;font-weight:800}.print-button:hover{background:#1c3062}.actions{display:flex;gap:8px;align-items:center}.assistive{position:absolute;height:1px;width:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:1050px){.weekday-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.focus{min-height:0}.hero-illustration{width:145px}}@media(max-width:650px){.page{padding:17px 14px 55px}.hero{padding:22px 18px;border-radius:20px}.hero-illustration{display:none}.topline{align-items:center}.actions .print-button{display:none}.reset{font-size:12px;padding:9px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{padding:13px}.stat strong{font-size:21px}.stat.free{grid-column:span 2}.weekday-grid,.weekend-grid{grid-template-columns:1fr}.day{padding:18px}.day-schedule{font-size:12px}.day .focus{min-height:0}.weekend-card{padding:17px}.weekend-rows{grid-template-columns:1fr}.routine-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.section-top{display:block}.section-top p{margin-top:4px}.weekend-session .focus{min-height:0}}
+@media print{body{background:white}.page{max-width:100%;padding:10px}.hero,.day,.weekend-card,.stat{box-shadow:none}button,.progress-wrap,.footnote{display:none!important}.weekday-grid{grid-template-columns:repeat(5,1fr)}.day{padding:10px 7px}.day-schedule{white-space:normal}.task{font-size:10px}.weekend-card{break-inside:avoid}.hero{padding:10px}.section-top{margin-top:16px}.routine{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="hero">
+  <div class="topline"><span class="eyebrow">Your GCSE study plan</span><div class="actions"><button class="print-button" onclick="window.print()" type="button">Print plan</button><button class="reset" id="reset" type="button">Reset week</button></div></div>
+  <div class="hero-row"><div><h1>Revision, without<br>the burnout.</h1><p class="intro">One subject a day on school nights. Science or maths only Monday to Friday. Your other subjects fit into short weekend sessions.</p></div>
+  <svg class="hero-illustration" viewBox="0 0 180 128" aria-hidden="true"><rect x="26" y="17" width="128" height="98" rx="16" fill="#E3EBFF"/><rect x="40" y="5" width="112" height="96" rx="10" fill="white" stroke="#CFD9F2" stroke-width="2"/><rect x="52" y="20" width="64" height="8" rx="4" fill="#B4C6EF"/><rect x="52" y="40" width="10" height="10" rx="3" fill="#3C9C85"/><path d="m54 45 3 3 5-6" fill="none" stroke="white" stroke-width="2"/><rect x="70" y="42" width="60" height="5" rx="2.5" fill="#D9E2F5"/><rect x="52" y="61" width="10" height="10" rx="3" fill="#3C9C85"/><path d="m54 66 3 3 5-6" fill="none" stroke="white" stroke-width="2"/><rect x="70" y="63" width="47" height="5" rx="2.5" fill="#D9E2F5"/><rect x="52" y="82" width="10" height="10" rx="3" fill="#F0C46D"/><rect x="70" y="84" width="55" height="5" rx="2.5" fill="#D9E2F5"/><circle cx="135" cy="91" r="22" fill="#D1EDE1"/><circle cx="135" cy="91" r="16" fill="#42A585"/><path d="M135 80V92L143 96" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
+  </div>
+</header>
+<section class="stats" aria-label="Plan at a glance">
+  <div class="stat"><small>School-day study</small><strong>60 min</strong> <span>+ 10 min break</span></div>
+  <div class="stat"><small>Weekend study</small><strong>80 min</strong> <span>each day</span></div>
+  <div class="stat free"><small>Free time after weekday revision</small><strong>3 hr 5 min</strong> <span>every evening</span></div>
+</section>
+<div class="progress-wrap"><div class="progress-track" role="progressbar" aria-label="Completed sessions" aria-valuemin="0" aria-valuemax="14" aria-valuenow="0" id="progressbar"><div class="progress-fill" id="progress-fill"></div></div><span class="progress-label" id="progress-label">0 / 14</span></div>
+<section aria-labelledby="schooltitle">
+  <div class="section-top"><h2 id="schooltitle">School days <span style="font-size:15px;color:#929bb0;font-weight:600">· Mon–Fri</span></h2><p>Home at 5:00 pm · 1 subject per day · editable subjects</p></div>
+  <div class="weekday-grid" id="weekday-grid"></div>
+</section>
+<section aria-labelledby="weekendtitle">
+  <div class="section-top"><h2 id="weekendtitle">Weekend <span style="font-size:15px;color:#929bb0;font-weight:600">· Sat–Sun</span></h2><p>Two different subjects per day · short and focused</p></div>
+  <div class="weekend-grid" id="weekend-grid"></div>
+</section>
+<section class="routine" aria-label="After school routine"><h3>Weekday routine · always finish before 7:30 pm</h3>
+  <div class="routine-grid">
+  <div class="routine-step"><strong>5:00–5:45 pm</strong><span>Get home, eat a snack, relax</span></div>
+  <div class="routine-step"><strong>5:45–6:15 pm</strong><span>First study block · 30 min</span></div>
+  <div class="routine-step"><strong>6:15–6:25 pm</strong><span>Take a proper 10-minute break</span><strong style="margin-top:5px">6:25–6:55 pm</strong><span>Second study block · 30 min</span></div>
+  <div class="routine-step free-time"><strong>6:55–10:00 pm ✨</strong><span>Free time, dinner and winding down. No more revision!</span></div>
+  </div>
+</section>
+<p class="footnote">Tip: Change a subject using its dropdown and tick off study blocks as you finish. Your changes are saved on this device. Friday repeats maths so every weekday follows your science-or-maths rule.</p>
+</main>
+<script>
+(() => {
+  'use strict';
+  const KEY='balanced-gcse-revision-v1';
+  const optionsWeek=['Chemistry','Biology','Physics','Maths'];
+  const optionsWeekend=['English','Citizenship','History','BTEC PE','Chemistry','Biology','Physics','Maths'];
+  const methods={'Chemistry':'Simple Study','Biology':'Simple Study','Physics':'Simple Study','Maths':'Past paper practice','English':'Past paper practice','Citizenship':'Gizmo','History':'Gizmo','BTEC PE':'Gizmo'};
+  const topics={
+    'Chemistry':['Review a tricky topic and key formulas','Try questions; fix mistakes'],
+    'Biology':['Revise one topic with Simple Study','Try short questions; correct errors'],
+    'Physics':['Revise one topic and its equations','Try calculations; mark corrections'],
+    'Maths':['Complete timed past-paper questions','Mark answers and redo mistakes'],
+    'English':['Practise a timed exam question','Review mark scheme and improve'],
+    'Citizenship':['Study key terms on Gizmo','Quiz yourself on definitions'],
+    'History':['Recall dates, events and people','Test knowledge using Gizmo'],
+    'BTEC PE':['Revise key sports/PE terms','Use Gizmo to test recall']
+  };
+  const defaults={weekdays:['Chemistry','Biology','Chemistry','Maths','Maths'],weekend:[['English','Citizenship'],['History','BTEC PE']],done:{}};
+  const copy=x=>JSON.parse(JSON.stringify(x));
+  let state=copy(defaults);
+  try{const found=JSON.parse(localStorage.getItem(KEY)); if(found&&Array.isArray(found.weekdays)&&found.weekdays.length===5&&Array.isArray(found.weekend)&&found.weekend.length===2){state={...copy(defaults),...found,done:found.done&&typeof found.done==='object'?found.done:{}};state.weekdays=state.weekdays.map((s,i)=>optionsWeek.includes(s)?s:defaults.weekdays[i]);state.weekend=state.weekend.map((slots,d)=>[0,1].map(i=>optionsWeekend.includes(slots?.[i])?slots[i]:defaults.weekend[d][i]));}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  function el(tag,cl,text){const node=document.createElement(tag);if(cl)node.className=cl;if(text!=null)node.textContent=text;return node;}
+  function checkbox(taskId,label){const wrap=el('label','task');const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!state.done[taskId];cb.addEventListener('change',()=>{state.done[taskId]=cb.checked;save();updateProgress();});wrap.append(cb,el('span','tasktext',label));return wrap;}
+  function selector(current,allowed,handler){const sel=el('select','subject-select');sel.setAttribute('aria-label','Choose subject');for(const subj of allowed){const o=el('option','',subj);o.value=subj;if(subj===current)o.selected=true;sel.append(o);}sel.addEventListener('change',()=>{handler(sel.value);save();render();});return sel;}
+  function methodNode(subject){const name=methods[subject];return el('span','method'+(name==='Gizmo'?' gizmo':name==='Past paper practice'?' paper':''),name);}
+  function isToday(idx){return new Date().getDay()===idx;}
+  const days=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  function renderWeekday(){const holder=document.getElementById('weekday-grid');holder.replaceChildren();days.forEach((name,i)=>{const subject=state.weekdays[i];const card=el('article','day'+(isToday(i+1)?' today':''));const head=el('div','day-head');head.append(el('div','day-name',name));if(isToday(i+1))head.append(el('span','today-tag','TODAY'));card.append(head,el('p','day-schedule','5:45–6:55 pm · 60 min'));
+    card.append(selector(subject,optionsWeek,s=>{state.weekdays[i]=s;state.done['w'+i+'a']=false;state.done['w'+i+'b']=false;}),methodNode(subject));
+    const focusText=subject==='Maths'?(i===3?'Non-calculator questions':i===4?'Calculator questions':'Timed past-paper practice'):subject==='Chemistry'?(i===0?'Equations and mole calculations':i===2?'Concentration and limiting reactants':'One chemistry topic'):'One manageable topic';
+    card.append(el('p','focus',focusText));card.append(el('div','mini-title','Two short blocks'));
+    card.append(checkbox('w'+i+'a','5:45–6:15 · '+topics[subject][0]));card.append(el('div','break','10 MIN BREAK'));card.append(checkbox('w'+i+'b','6:25–6:55 · '+topics[subject][1]));
+    card.append(el('div','day-footer','✅ Finish by 6:55 pm'));holder.append(card);});}
+  function renderWeekend(){const holder=document.getElementById('weekend-grid');holder.replaceChildren();['Saturday','Sunday'].forEach((name,d)=>{const card=el('article','weekend-card'+(isToday(d===0?6:0)?' today':''));const head=el('div','weekend-head');const label=el('div');label.append(el('div','day-name',name),el('div','weekend-sub','Two short sessions · finish by 12:05 pm'));head.append(label);if(isToday(d===0?6:0))head.append(el('span','today-tag','TODAY'));card.append(head);
+    const rows=el('div','weekend-rows');state.weekend[d].forEach((subject,j)=>{const block=el('div','weekend-session');block.append(el('div','session-time',j===0?'10:30–11:10 am · 40 min':'11:25–12:05 pm · 40 min'));
+      block.append(selector(subject,optionsWeekend,s=>{state.weekend[d][j]=s;state.done['e'+d+j]=false;}),methodNode(subject),el('p','focus',topics[subject][0]));block.append(checkbox('e'+d+j,topics[subject][1]));rows.append(block);});card.append(rows);card.append(el('div','weekend-pause','11:10–11:25 am: 15-minute break between subjects'));holder.append(card);});}
+  function updateProgress(){const tasks=[];for(let i=0;i<5;i++)tasks.push('w'+i+'a','w'+i+'b');for(let d=0;d<2;d++)for(let j=0;j<2;j++)tasks.push('e'+d+j);const completed=tasks.filter(k=>state.done[k]).length;document.getElementById('progress-label').textContent=completed+' / '+tasks.length;document.getElementById('progress-fill').style.width=(100*completed/tasks.length)+'%';document.getElementById('progressbar').setAttribute('aria-valuenow',String(completed));}
+  function render(){renderWeekday();renderWeekend();updateProgress();}
+  document.getElementById('reset').addEventListener('click',()=>{if(confirm('Reset subjects and untick all revision sessions for this week?')){state=copy(defaults);save();render();}});
+  render();
+})();
+</script>
+</body>
+</html>
